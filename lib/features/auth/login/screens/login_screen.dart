@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tidmuv/features/auth/forgot_password/screens/forgot_password_screen.dart';
 import 'package:tidmuv/features/auth/registration/screens/personal_information_screen.dart';
+import 'package:tidmuv/features/home/screens/home_screen.dart';
 import 'package:tidmuv/utilities/constants/app_colors.dart';
 import 'package:tidmuv/utilities/shared_components/custom_text_Field.dart';
 
@@ -105,8 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const Spacer(),
                       CustomButtonOne(
-                        title: "Continue",
-                        onClick: () {},
+                        title: "Sign in",
+                        onClick: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreen()));
+                        },
                       ),
                       const SizedBox(height: 10,),
                       Row(
