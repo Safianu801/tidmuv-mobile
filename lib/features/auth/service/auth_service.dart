@@ -52,12 +52,29 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> uploadImage(BuildContext context) async {
+  Future<void> verifySSN(BuildContext context, String ssn) async {
+    try {
+      final response = await http.post(Uri.parse("${baseUrl}api/v1/auth/ssn-verification"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode({
+          "ssn" : ssn
+        })
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+  Future<void> uploadImage(BuildContext context, String image_url) async {
     try {
       final response = await http.post(Uri.parse("${baseUrl}api/v1/auth/add-image"),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        body: json.encode({
+          "image_url" : image_url
+        })
       );
     } catch (e) {
       print(e);
@@ -100,7 +117,7 @@ class AuthService with ChangeNotifier {
           "Content-Type": "application/json",
         },
         body: json.encode({
-          "email" : "samosno"
+          "email" : email
         })
       );
     } catch (e) {
@@ -159,140 +176,9 @@ class AuthService with ChangeNotifier {
           onSuccess: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             var responseBody = jsonDecode(response.body);
-            var userJson = responseBody['user'];
-            // Provider.of<UserProvider>(context, listen: false)
-            //     .setUser(jsonEncode(userJson));
-            // String? token = userJson['token'];
-            // String? blinksID = userJson['blinksID'];
-            // if (token != null && blinksID != null) {
-            //   await prefs.setString('Authorization', token);
-            //   await prefs.setString('user', blinksID);
-            //   Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => const ShopScreen(),
-            //   ));
-            // } else {
-            //   print("Error: token or blinksID is null");
-            //   ScaffoldMessenger.of(context).showSnackBar(
-            //     const SnackBar(content: Text("Login failed. Please try again.")),
-            //   );
-            // }
           });
     } catch (err) {
       throw (err);
     }
   }
-  //
-  // //update profile
-  // Future<void> updateProfile(BuildContext context, Map<String, dynamic> updates) async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("Authorization");
-  //     final Uri url = Uri.parse("$baseUrl/api/v1/blinks/user/update-user-profile");
-  //
-  //     final response = await http.put(
-  //       url,
-  //       headers: {
-  //         "Authorization": "Bearer $token",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: jsonEncode(updates),
-  //     );
-  //     httpErrorHandler(
-  //         response: response, context: context, onSuccess: () {
-  //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileUpdateSuccessScreen()));
-  //     });
-  //   } catch (error) {
-  //     print('Error creating recipe: $error');
-  //   }
-  // }
-  // Future<void> updatePassword(BuildContext context, String oldPassword, String newPassword) async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("Authorization");
-  //     final Uri url = Uri.parse("$baseUrl/api/v1/blinks/user/update-user-password");
-  //
-  //     final response = await http.put(
-  //       url,
-  //       headers: {
-  //         "Authorization": "Bearer $token",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: json.encode({
-  //         "oldPassword": oldPassword,
-  //         "newPassword": newPassword,
-  //       }),
-  //     );
-  //     httpErrorHandler(
-  //         response: response, context: context, onSuccess: () {
-  //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PasswordChangeSuccessScreen()));
-  //     });
-  //   } catch (error) {
-  //     print('Error creating recipe: $error');
-  //   }
-  // }
-  // Future<void> blinksTag(BuildContext context, Map<String, dynamic> userTag) async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("Authorization");
-  //     final Uri url = Uri.parse("$baseUrl/api/v1/blinks/user/update-user-profile");
-  //
-  //     final response = await http.put(
-  //       url,
-  //       headers: {
-  //         "Authorization": "Bearer $token",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: jsonEncode(userTag),
-  //     );
-  //     httpErrorHandler(
-  //         response: response, context: context, onSuccess: () {
-  //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BlinksTagCreationSuccessScreen()));
-  //     });
-  //   } catch (error) {
-  //     print('Error creating recipe: $error');
-  //   }
-  // }
-  // Future<void> setAccountPIN(BuildContext context, int accountPIN) async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("Authorization");
-  //     final response = await http.put(Uri.parse("$baseUrl/api/v1/blinks/user/set-user-account-pin"),
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Authorization": "Bearer $token"
-  //         },
-  //         body: json.encode({
-  //           "accountPIN": accountPIN
-  //         })
-  //     );
-  //     print(response.body);
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AccountPinSuccessScreen()));
-  //     } else {
-  //       showSnackBar(context: context, message: "We are unable to set your account PIN, please try again later or contact our customer care to help get the issue resolved", title: "Unable To Set PIN");
-  //     }
-  //   } catch (e) {
-  //     showSnackBar(context: context, message: "$e", title: "Server Error");
-  //   }
-  // }
-  //
-  // //logout
-  // Future<void> logOut(BuildContext context) async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("Authorization");
-  //     final response = await http.post(Uri.parse("$baseUrl/api/v1/blinks/auth/user-logout"),
-  //         headers: {
-  //           "Authorization": "Bearer $token",
-  //           "Content-Type": "application/json"
-  //         }
-  //     );
-  //     httpErrorHandler(response: response, context: context, onSuccess: (){
-  //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
-  //     });
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$e")));
-  //     print(e);
-  //   }
-  // }
 }

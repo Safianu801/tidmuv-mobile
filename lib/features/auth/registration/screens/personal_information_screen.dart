@@ -61,8 +61,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       print(e);
     }
   }
-
-  // Function to pick an image from gallery or camera
   Future<void> _pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
