@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tidmuv/features/auth/registration/screens/social_security_number_screen.dart';
 import 'package:tidmuv/features/auth/service/auth_service.dart';
 import 'package:tidmuv/utilities/shared_components/custom_back_button.dart';
@@ -20,6 +23,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
   AuthService authService = AuthService();
+
+
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> collectUserInformation(
     BuildContext context,
@@ -55,6 +62,16 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     }
   }
 
+  // Function to pick an image from gallery or camera
+  Future<void> _pickImage() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _selectedImage = File(pickedImage.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,11 +86,27 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             children: [
               Column(
                 children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[400], shape: BoxShape.circle),
+
+                  //profile image
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        shape: BoxShape.circle,
+                        image: _selectedImage != null
+                            ? DecorationImage(
+                          image: FileImage(_selectedImage!),
+                          fit: BoxFit.cover,
+                        )
+                            : null,
+                      ),
+                      child: _selectedImage == null
+                          ? const Icon(Icons.camera_alt, size: 40)
+                          : null,
+                    ),
                   ),
                   const Text(
                     "Upload Profile",
