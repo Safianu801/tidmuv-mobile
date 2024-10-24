@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:tidmuv/features/delivery_package/screens/deliver_package_screen.dart';
-import 'package:tidmuv/features/home/components/package_history_card_style.dart';
-import 'package:tidmuv/features/home/screens/package_history_screen.dart';
-import 'package:tidmuv/features/profile/screens/profile_screen.dart';
-import 'package:tidmuv/features/request_delivery/screen/request_delivery_screen.dart';
-import 'package:tidmuv/features/tracking_feature/screens/package_tracking_screen.dart';
-import 'package:tidmuv/features/wallet/screens/wallet_screen.dart';
-import 'package:tidmuv/utilities/constants/app_colors.dart';
-import 'package:tidmuv/utilities/shared_components/tracking_text_field.dart';
+import 'package:tidmuv/features/wallet/screens/withdraw_funds_screen.dart';
+import 'package:tidmuv/features/wallet/components/transaction_history_card_style.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+import '../../../utilities/constants/app_colors.dart';
+import '../../home/screens/package_history_screen.dart';
+import '../../profile/screens/profile_screen.dart';
+
+class WalletScreen extends StatefulWidget {
+  const WalletScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<WalletScreen> createState() => _WalletScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _WalletScreenState extends State<WalletScreen> {
   final trackingController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final options = [
+    "All",
+    "Pending",
+    "Disputed",
+    "Completed",
+  ];
+  String selectedOption = "All";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.transparent
+                      color: Colors.transparent
                   ),
                   child: Row(
                     children: [
@@ -165,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
               iconColor: Colors.white,
               leading: const Icon(Icons.history),
               title: const Text('Package History', style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500
               ),),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -179,9 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
               iconColor: Colors.white,
               leading: const Icon(Icons.account_balance_wallet),
               title: const Text('My Wallet'),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const WalletScreen()));
-              },
+              onTap: () {},
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -213,60 +214,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.transparent,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
-                      "Track your Package",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Available Balance",
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const Text(
+                          "\$ 15,000,25",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                          ),
+                        )
+                      ],
                     ),
                     GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PackageTrackingScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const WithdrawFundsScreen()));
                       },
                       child: Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
+                        height: 35,
+                        width: 35,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(10)
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    color: const Color(AppColors.primaryColor),
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset("images/Group 33295.png", color: Colors.white,),
-                                ),
-                              ),
-                              const Text(
-                                "Enter tracking Number",
-                                style: TextStyle(
-                                  color: Color(AppColors.primaryColor),
-                                  fontSize: 16
-                                ),
-                              ),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.control_point, color: const Color(AppColors.primaryColor),))
-                            ],
-                          ),
+                        child: const Center(
+                          child: Icon(Icons.attach_money_rounded, color: Color(AppColors.primaryColor),),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -288,62 +278,50 @@ class _HomeScreenState extends State<HomeScreen> {
                       right: 10.0, left: 10.0, top: 20.0),
                   child: Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Current Package",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: const Color(AppColors.primaryColor),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.filter_alt_rounded, color: Colors.white,),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Container(
-                            height: 120,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: Color(AppColors.primaryColor),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Our Service",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RequestDeliveryScreen()));
-                                    },
-                                    child: Image.asset(
-                                        "images/Request Option.png"),
+                            const SizedBox(width: 10,),
+                            for (int i = 0; i < options.length; i++)
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    selectedOption = options[i];
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      color: selectedOption == options[i] ? const Color(AppColors.primaryColor) : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                                      child: Text(
+                                        options[i],
+                                        style: TextStyle(
+                                            color: selectedOption == options[i] ? Colors.white : const Color(AppColors.primaryColor)
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DeliverPackageScreen()));
-                                    },
-                                    child: Image.asset(
-                                        "images/Delivery Option.png"),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                              ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 15),
                       Row(
@@ -372,8 +350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      for (int i = 0; i < 4; i++)
-                        const PackageHistoryCardStyle()
+                      for (int i = 0; i < 10; i++)
+                        const TransactionHistoryCardStyle()
                     ],
                   ),
                 ),

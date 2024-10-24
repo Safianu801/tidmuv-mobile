@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tidmuv/features/auth/registration/screens/social_security_number_screen.dart';
+import 'package:tidmuv/features/auth/service/auth_service.dart';
 import 'package:tidmuv/utilities/shared_components/custom_back_button.dart';
 import 'package:tidmuv/utilities/shared_components/custom_button_one.dart';
 import 'package:tidmuv/utilities/shared_components/custom_text_Field.dart';
@@ -17,6 +18,21 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   final lastNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
+  AuthService authService = AuthService();
+  Future<void> collectUserInformation(BuildContext context,
+      String firstName,
+      String lastName,
+      String middleName,
+      String phoneNumber,
+      String dateofbirth,
+      String email,
+      String gender,) async {
+    try {
+      authService.registerUser(context, firstName, lastName, middleName, phoneNumber, dateofbirth, email, gender,);
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +76,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
               CustomTextField(hintText: "Email", controller: emailController, isObscure: false),
               const SizedBox(height: 30,),
               CustomButtonOne(title: "Proceed", onClick: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SocialSecurityNumberScreen()));
+                collectUserInformation(context, firstNameController.text.trim(), lastNameController.text.trim(), middleNameController.text.trim(), phoneNumberController.text.trim(), "", emailController.text.trim(), "");
               })
             ],
           ),

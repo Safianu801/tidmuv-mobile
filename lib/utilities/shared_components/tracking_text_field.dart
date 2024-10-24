@@ -3,8 +3,10 @@ import 'package:tidmuv/utilities/constants/app_colors.dart';
 
 class TrackingTextField extends StatelessWidget {
   final String hintText;
+  final String? prefixIcon;
+  final IconData? suffixIcon;
   final TextEditingController controller;
-  const TrackingTextField({super.key, required this.hintText, required this.controller});
+  const TrackingTextField({super.key, required this.hintText, required this.controller, this.prefixIcon, this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +38,11 @@ class TrackingTextField extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset("images/Group 33295.png", color: Colors.white,),
+              child: Image.asset(prefixIcon ?? "images/Group 33295.png", color: Colors.white,),
             ),
           ),
         ),
-        suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.control_point, color: Color(AppColors.primaryColor),))
+        suffixIcon: IconButton(onPressed: (){}, icon: Icon(suffixIcon ?? Icons.control_point, color: const Color(AppColors.primaryColor),))
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tidmuv/features/home/components/package_history_card_style.dart';
+import 'package:tidmuv/features/home/components/recent_delivery_card_style.dart';
 import 'package:tidmuv/utilities/constants/app_colors.dart';
 import 'package:tidmuv/utilities/shared_components/custom_back_button.dart';
 
@@ -171,7 +172,66 @@ class _PackageHistoryScreenState extends State<PackageHistoryScreen> {
                   ),
                 ),
               )
-            ],) : Column(children: [],)
+            ],) : Column(children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: const Color(AppColors.primaryColor),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.filter_alt_rounded, color: Colors.white,),
+                              ),
+                            ),
+                            const SizedBox(width: 10,),
+                            for (int i = 0; i < options.length; i++)
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    selectedOption = options[i];
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      color: selectedOption == options[i] ? const Color(AppColors.primaryColor) : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                                      child: Text(
+                                        options[i],
+                                        style: TextStyle(
+                                            color: selectedOption == options[i] ? Colors.white : const Color(AppColors.primaryColor)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      for (int i = 0; i < 15; i++)
+                        const RecentDeliveryCardStyle()
+                    ],
+                  ),
+                ),
+              )
+            ],)
           ],
         ),
       ),
