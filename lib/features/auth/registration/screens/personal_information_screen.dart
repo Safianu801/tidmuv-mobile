@@ -56,7 +56,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   Future<void> uploadProfile(BuildContext context) async {
     try {
-      await authService.uploadImage(context);
+      await authService.uploadImage(context, "");
     } catch (e) {
       print(e);
     }
